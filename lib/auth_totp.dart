@@ -132,13 +132,23 @@ class AuthTOTP {
   // Generates a QR code URL for OTP authentication.
   /// * [appName] : App name
   /// * [secretKey] : Secret key
+  /// 
+  /// Returns a URL string for the QR code
   static String getQRCodeUrl(
       {required String appName,
       required String secretKey,
       String? issuer = 'auth_otp'}) {
-    return 'https://api.qrserver.com/v1/create-qr-code/?data=otpauth://totp/$appName?secret=$secretKey&issuer=$issuer';
-  }
+    final uri = Uri(
+      scheme: 'https',
+      host: 'api.qrserver.com',
+      path: '/v1/create-qr-code/',
+      queryParameters: {
+        'data': 'otpauth://totp/$appName?secret=$secretKey&issuer=$issuer',
+      },
+    );
 
+    return uri.toString();
+  }
   /// Adds spaces to the input string every 4 characters.
   ///
   /// This function takes a string as input and adds spaces to it every 4 characters.
